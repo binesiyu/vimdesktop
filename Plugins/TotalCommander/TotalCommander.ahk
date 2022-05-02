@@ -1014,7 +1014,7 @@
 ; 常用文件夹:另一侧
 <DirectoryHotlistother>:
     ControlGetFocus, CurrentFocus, ahk_class TTOTAL_CMD
-    if CurrentFocus not in %TCListBox%2, %TCListBox%1
+    if CurrentFocus not in %TCListBox%2,%TCListBox%1
         return
     if CurrentFocus in %TCListBox%2
         otherlist = %TCListBox%1
@@ -1048,7 +1048,7 @@ return
 ;<TC_CopyDirectoryHotlist>: >>复制到常用文件夹{{{2
 <TC_CopyDirectoryHotlist>:
     ControlGetFocus, CurrentFocus, ahk_class TTOTAL_CMD
-    if CurrentFocus not in %TCListBox%2, %TCListBox%1
+    if CurrentFocus not in %TCListBox%2,%TCListBox%1
         return
     if CurrentFocus in %TCListBox%2
         otherlist = %TCListBox%1
@@ -1094,7 +1094,7 @@ return
 <TC_MoveDirectoryHotlist>:
     if SendPos(0)
         ControlGetFocus, CurrentFocus, ahk_class TTOTAL_CMD
-    if CurrentFocus not in %TCListBox%2, %TCListBox%1
+    if CurrentFocus not in %TCListBox%2,%TCListBox%1
         return
     if CurrentFocus in %TCListBox%2
         otherlist = %TCListBox%1
