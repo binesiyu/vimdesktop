@@ -4,8 +4,8 @@ all=$1
 chn=$2
 
 (($# == 2)) || {
-    all=/mnt/c/mine/app/totalcmd/Totalcmd.inc
-    chn=/mnt/c/mine/app/totalcmd/Language/Wcmd_chn.inc
+    all=/d/git/TotalCMD64/Totalcmd.inc
+    chn=/d/git/TotalCMD64/Language/Wcmd_chn.inc
 }
 
 cat $all | grep '^cm_' | sed 's/=\(.*\);.*/\n\1/g' > cmdlist.txt

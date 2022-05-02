@@ -69,7 +69,6 @@
     vim.SetAction("<SwitchToEngIMEAndEsc>", "切换到英文输入法并按 Esc 键")
     vim.SetAction("<SwitchToEngIME>", "切换到英文输入法")
 
-
     vim.SetWin("General", "General")
     vim.SetMode("insert", "General")
     vim.map("<Esc>", "<Gen_NormalMode>", "General")
@@ -175,7 +174,7 @@ return
 return
 
 <Exit>:
-    ExitApp
+ExitApp
 return
 
 <Suspend>:
@@ -196,6 +195,10 @@ return
 
 <right>:
     send, {right}
+return
+
+<Esc>:
+    Send,{Esc}
 return
 
 <home>:
@@ -313,7 +316,6 @@ return
     FullScreenID[windowID] := WindowState
 return
 
-
 ;====================================================================================
 ;
 ; WindowPad.ahk
@@ -347,7 +349,7 @@ WindowPadMove(P)
         heightFactor := P4+0 ? P4 : (P2 ? 0.5 : 1.0)
     } else {
         ; to center
-        widthFactor  := P3+0 ? P3 : 1.0
+        widthFactor := P3+0 ? P3 : 1.0
         heightFactor := P4+0 ? P4 : 1.0
     }
 
@@ -373,28 +375,28 @@ MoveWindowInDirection(sideX, sideY, widthFactor, heightFactor)
 
     hwnd:=WinExist()
     if (can_restore := GetWindowProperty(hwnd, "wpHasRestorePos"))
-    {   ; Window has restore info. Check if it is where we last put it.
+    { ; Window has restore info. Check if it is where we last put it.
         last_x := GetWindowProperty(hwnd, "wpLastX")
         last_y := GetWindowProperty(hwnd, "wpLastY")
         last_w := GetWindowProperty(hwnd, "wpLastW")
         last_h := GetWindowProperty(hwnd, "wpLastH")
     }
     if (can_restore && last_x = x && last_y = y && last_w = w && last_h = h)
-    {   ; Window is where we last put it. Check if user wants to restore.
+    { ; Window is where we last put it. Check if user wants to restore.
         if SubStr(sideX, 1, 1) = "R"
-        {   ; Restore on X-axis.
+        { ; Restore on X-axis.
             restore_x := GetWindowProperty(hwnd, "wpRestoreX")
             restore_w := GetWindowProperty(hwnd, "wpRestoreW")
             StringTrimLeft, sideX, sideX, 1
         }
         if SubStr(sideY, 1, 1) = "R"
-        {   ; Restore on Y-axis.
+        { ; Restore on Y-axis.
             restore_y := GetWindowProperty(hwnd, "wpRestoreY")
             restore_h := GetWindowProperty(hwnd, "wpRestoreH")
             StringTrimLeft, sideY, sideY, 1
         }
         if (restore_x != "" || restore_y != "")
-        {   ; If already at the "restored" size and position, do the normal thing instead.
+        { ; If already at the "restored" size and position, do the normal thing instead.
             if ((restore_x = x || restore_x = "") && (restore_y = y || restore_y = "")
                 && (restore_w = w || restore_w = "") && (restore_h = h || restore_h = ""))
             {
@@ -406,7 +408,7 @@ MoveWindowInDirection(sideX, sideY, widthFactor, heightFactor)
         }
     }
     else
-    {   ; Next time user requests the window be "restored" use this position and size.
+    { ; Next time user requests the window be "restored" use this position and size.
         SetWindowProperty(hwnd, "wpHasRestorePos", true)
         SetWindowProperty(hwnd, "wpRestoreX", x)
         SetWindowProperty(hwnd, "wpRestoreY", y)
@@ -435,17 +437,17 @@ MoveWindowInDirection(sideX, sideY, widthFactor, heightFactor)
 
     ; If the window is already there,
     if (newx ", " newy ", " neww ", " newh) = (x ", " y ", " w ", " h)
-    {   ; ..move to the next monitor along instead.
+    { ; ..move to the next monitor along instead.
 
         if (sideX or sideY)
-        {   ; Move in the direction of sideX or sideY.
+        { ; Move in the direction of sideX or sideY.
             SysGet, monB, Monitor, %m% ; get bounds of entire monitor (vs. work area)
             x := (sideX=0) ? (x+w/2) : (sideX>0 ? monBRight : monBLeft) + sideX
             y := (sideY=0) ? (y+h/2) : (sideY>0 ? monBBottom : monBTop) + sideY
             newm := GetMonitorAt(x, y, m)
         }
         else
-        {   ; Move to center (Numpad5)
+        { ; Move to center (Numpad5)
             newm := m+1
             SysGet, mon, MonitorCount
             if (newm > mon)
@@ -523,7 +525,7 @@ MoveWindowInDirection(sideX, sideY, widthFactor, heightFactor)
     SetWindowProperty(hwnd, "wpLastY", newy)
     SetWindowProperty(hwnd, "wpLastW", neww)
     SetWindowProperty(hwnd, "wpLastH", newh)
-    return
+return
 
 CalcNewSizeAndPosition:
     ; Calculate new size.
@@ -536,25 +538,25 @@ CalcNewSizeAndPosition:
     }
 CalcNewPosition:
     ; Calculate new position.
-    newx := restore_x != "" ? restore_x : Round(monLeft + (sideX+1) * (monWidth  - neww)/2)
-    newy := restore_y != "" ? restore_y : Round(monTop  + (sideY+1) * (monHeight - newh)/2)
+    newx := restore_x != "" ? restore_x : Round(monLeft + (sideX+1) * (monWidth - neww)/2)
+    newy := restore_y != "" ? restore_y : Round(monTop + (sideY+1) * (monHeight - newh)/2)
 return
 
 CalcMonitorStats:
     ; Get work area (excludes taskbar-reserved space.)
     SysGet, mon, MonitorWorkArea, %m%
-    monWidth  := monRight - monLeft
+    monWidth := monRight - monLeft
     monHeight := monBottom - monTop
 return
 }
 
 ; Get/set window property. type should be int, uint or float.
 GetWindowProperty(hwnd, property_name, type="int") {
-    return DllCall("GetProp", "uint", hwnd, "str", property_name, type)
+return DllCall("GetProp", "uint", hwnd, "str", property_name, type)
 }
 
 SetWindowProperty(hwnd, property_name, data, type="int") {
-    return DllCall("SetProp", "uint", hwnd, "str", property_name, type, data)
+return DllCall("SetProp", "uint", hwnd, "str", property_name, type, data)
 }
 
 ; Get the index of the monitor containing the specified x and y co-ordinates.
@@ -570,7 +572,7 @@ GetMonitorAt(x, y, default=1)
             return A_Index
     }
 
-    return default
+return default
 }
 
 IsResizable()
@@ -581,7 +583,7 @@ IsResizable()
     if Class = ConsoleWindowClass
         return false
     WinGet, Style, Style
-    return (Style & 0x40000) ; WS_SIZEBOX
+return (Style & 0x40000) ; WS_SIZEBOX
 }
 
 WindowPad_WinExist(WinTitle)
@@ -593,7 +595,7 @@ WindowPad_WinExist(WinTitle)
         MouseGetPos, , , win
         return WinExist("ahk_id " win)
     }
-    return WinExist(WinTitle!="" ? WinTitle : "A")
+return WinExist(WinTitle!="" ? WinTitle : "A")
 }
 
 ; Note: This may not work properly with always-on-top windows. (Needs testing)
@@ -606,19 +608,19 @@ WinPreviouslyActive()
     ; (Might not be win1 if there are always-on-top windows?)
     Loop, %win%
         if (win%A_Index% = active)
-        {
-            if (A_Index < win)
-                N := A_Index+1
+    {
+        if (A_Index < win)
+            N := A_Index+1
 
-            ; hack for PSPad: +1 seems to get the document (child!) window, so do +2
-            ifWinActive, ahk_class TfPSPad
-                N += 1
+        ; hack for PSPad: +1 seems to get the document (child!) window, so do +2
+        ifWinActive, ahk_class TfPSPad
+            N += 1
 
-            break
-        }
+        break
+    }
 
     ; Use WinExist to set Last Found Window (for consistency with WinActive())
-    return WinExist("ahk_id " . win%N%)
+return WinExist("ahk_id " . win%N%)
 }
 
 ;
@@ -746,11 +748,11 @@ GatherWindows(md=1)
         ms := 0
         Loop, %mc%
             if (xc >= mon%A_Index%Left && xc <= mon%A_Index%Right
-                && yc >= mon%A_Index%Top && yc <= mon%A_Index%Bottom)
-            {
-                ms := A_Index
-                break
-            }
+            && yc >= mon%A_Index%Top && yc <= mon%A_Index%Bottom)
+        {
+            ms := A_Index
+            break
+        }
         ; If already on destination monitor, skip this window.
         if (ms = md)
             continue
@@ -804,9 +806,8 @@ GetLastMinimizedWindow()
         }
     }
 
-    return "ahk_id " . (lastFound ? lastFound : 0)
+return "ahk_id " . (lastFound ? lastFound : 0)
 }
-
 
 ;================================== 功能代码 :由北风一叶提供
 ;下一个标签
@@ -920,7 +921,7 @@ ShowHelp()
         if (act.Type = 1)
         {
             ActionDescList := act.Comment
-            np .= i "`t"  %ActionDescList%[i] "`n"
+            np .= i "`t" %ActionDescList%[i] "`n"
         }
         else
         {
@@ -1000,180 +1001,180 @@ TestFunction(arg)
 
     FileSelectFile, selectedFile, s16, 截图_%A_Now%.jpg, 另存为, 图片(*.jpg; *.png; *.gif; *.bmp)
 
-    if (selectedFile == "")
-    {
-        return
-    }
-    else if (!InStr(selectedFile, "."))
-    {
-        selectedFile .= ".jpg"
-    }
-
-    SaveImageFromClipboard(selectedFile)
-return
-
-SaveImageFromClipboard(filename)
-{
-    pToken := Gdip_Startup()
-    pBitmap := Gdip_CreateBitmapFromClipboard()
-    Gdip_SaveBitmapToFile(pBitmap, filename, 100)
-    Gdip_DisposeImage(pBitmap)
-    Gdip_Shutdown(pToken)
-}
-
-; ScreenSnapshot("FullScreen.png")
-; ScreenSnapshot("Area_xywh.png", "10|20|200|200")
-ScreenSnapshot(filename, area := 0)
-{
-    pToken := Gdip_Startup()
-    pBitmap := Gdip_BitmapFromScreen(area)
-    Gdip_SaveBitmapToFile(pBitmap, filename)
-    Gdip_DisposeImage(pBitmap)
-    Gdip_Shutdown(pToken)
-}
-
-IME_GET(WinTitle := "")
-;-----------------------------------------------------------
-; IMEの状態の取得
-;    対象： AHK v1.0.34以降
-;   WinTitle : 対象Window (省略時:アクティブウィンドウ)
-;   戻り値  1:ON 0:OFF
-;-----------------------------------------------------------
-{
-    ; ifEqual WinTitle, ,SetEnv, WinTitle, A
-    ; WinGet, hWnd, ID, %WinTitle%
-    WinGet, hWnd, ID, A
-    DefaultIMEWnd := DllCall("imm32\ImmGetDefaultIMEWnd", Uint, hWnd, Uint)
-
-    ; Message : WM_IME_CONTROL  wParam:IMC_GETOPENSTATUS
-    DetectSave := A_DetectHiddenWindows
-    DetectHiddenWindows, ON
-    SendMessage 0x283, 0x005, 0, , ahk_id %DefaultIMEWnd%
-    DetectHiddenWindows, %DetectSave%
-    return ErrorLevel
-}
-
-SwitchIME(dwLayout)
-{
-    HKL := DllCall("LoadKeyboardLayout", Str, dwLayout, UInt, 1)
-    ControlGetFocus, ctl, A
-    SendMessage, 0x50, 0, HKL, %ctl%, A
-}
-
-; 来自天甜
-; 用法：SwitchIMEname("中文(简体) - 百度输入法")
-SwitchIMEByName(name)
-{
-    Loop, HKLM, SYSTEM\CurrentControlSet\Control\Keyboard Layouts, 1, 1
-    {
-        IfEqual, A_LoopRegName, Layout Text
+        if (selectedFile == "")
         {
-            RegRead, Value
-            IfInString,value,%name%
+            return
+        }
+        else if (!InStr(selectedFile, "."))
+        {
+            selectedFile .= ".jpg"
+        }
+
+        SaveImageFromClipboard(selectedFile)
+        return
+
+        SaveImageFromClipboard(filename)
+        {
+            pToken := Gdip_Startup()
+            pBitmap := Gdip_CreateBitmapFromClipboard()
+            Gdip_SaveBitmapToFile(pBitmap, filename, 100)
+            Gdip_DisposeImage(pBitmap)
+            Gdip_Shutdown(pToken)
+        }
+
+        ; ScreenSnapshot("FullScreen.png")
+        ; ScreenSnapshot("Area_xywh.png", "10|20|200|200")
+        ScreenSnapshot(filename, area := 0)
+        {
+            pToken := Gdip_Startup()
+            pBitmap := Gdip_BitmapFromScreen(area)
+            Gdip_SaveBitmapToFile(pBitmap, filename)
+            Gdip_DisposeImage(pBitmap)
+            Gdip_Shutdown(pToken)
+        }
+
+        IME_GET(WinTitle := "")
+        ;-----------------------------------------------------------
+        ; IMEの状態の取得
+        ;    対象： AHK v1.0.34以降
+        ;   WinTitle : 対象Window (省略時:アクティブウィンドウ)
+        ;   戻り値  1:ON 0:OFF
+        ;-----------------------------------------------------------
+        {
+            ; ifEqual WinTitle, ,SetEnv, WinTitle, A
+            ; WinGet, hWnd, ID, %WinTitle%
+            WinGet, hWnd, ID, A
+            DefaultIMEWnd := DllCall("imm32\ImmGetDefaultIMEWnd", Uint, hWnd, Uint)
+
+            ; Message : WM_IME_CONTROL  wParam:IMC_GETOPENSTATUS
+            DetectSave := A_DetectHiddenWindows
+            DetectHiddenWindows, ON
+            SendMessage 0x283, 0x005, 0, , ahk_id %DefaultIMEWnd%
+            DetectHiddenWindows, %DetectSave%
+            return ErrorLevel
+        }
+
+        SwitchIME(dwLayout)
+        {
+            HKL := DllCall("LoadKeyboardLayout", Str, dwLayout, UInt, 1)
+            ControlGetFocus, ctl, A
+            SendMessage, 0x50, 0, HKL, %ctl%, A
+        }
+
+        ; 来自天甜
+        ; 用法：SwitchIMEname("中文(简体) - 百度输入法")
+        SwitchIMEByName(name)
+        {
+            Loop, HKLM, SYSTEM\CurrentControlSet\Control\Keyboard Layouts, 1, 1
             {
-                RegExMatch(A_LoopRegSubKey, "[^\\]+$", dwLayout)
-                HKL := DllCall("LoadKeyboardLayout", Str, dwLayout, UInt, 1)
-                ControlGetFocus, ctl, A
-                SendMessage, 0x50, 0, HKL, %ctl%, A
-                break
+                IfEqual, A_LoopRegName, Layout Text
+                {
+                    RegRead, Value
+                    IfInString,value,%name%
+                    {
+                        RegExMatch(A_LoopRegSubKey, "[^\\]+$", dwLayout)
+                        HKL := DllCall("LoadKeyboardLayout", Str, dwLayout, UInt, 1)
+                        ControlGetFocus, ctl, A
+                        SendMessage, 0x50, 0, HKL, %ctl%, A
+                        break
+                    }
+                }
             }
         }
-    }
-}
 
-<SwitchToEngIME>:
-    ; 下方代码可只保留一个
-    SwitchIME(0x04090409) ; 英语(美国) 美式键盘
-    SwitchIME(0x08040804) ; 中文(中国) 简体中文-美式键盘
-return
-
-<SwitchToEngIMEAndEsc>:
-    Send, {esc}
-    ; 下方代码可只保留一个
-    SwitchIME(0x04090409) ; 英语(美国) 美式键盘
-    SwitchIME(0x08040804) ; 中文(中国) 简体中文-美式键盘
-return
-
-<RunZ>:
-    RunZPath := A_ScriptDir "\..\RunZ\RunZ.exe"
-    if (ini.config.runz_dir != "")
-    {
-        RunZPath := ini.config.runz_dir "\RunZ.exe"
-    }
-
-    if (!FileExist(RunZPath))
-    {
+        <SwitchToEngIME>:
+            ; 下方代码可只保留一个
+            SwitchIME(0x04090409) ; 英语(美国) 美式键盘
+            SwitchIME(0x08040804) ; 中文(中国) 简体中文-美式键盘
         return
-    }
 
-    Run, "%RunZPath%"
-return
+        <SwitchToEngIMEAndEsc>:
+            Send, {esc}
+            ; 下方代码可只保留一个
+            SwitchIME(0x04090409) ; 英语(美国) 美式键盘
+            SwitchIME(0x08040804) ; 中文(中国) 简体中文-美式键盘
+        return
 
-<AppendClipboard>:
-    OldClipboard := Clipboard
-    Clipboard =
-    Send, ^c
-    ClipWait, 2
-    Clipboard := OldClipboard . Clipboard
-return
+        <RunZ>:
+            RunZPath := A_ScriptDir "\..\RunZ\RunZ.exe"
+            if (ini.config.runz_dir != "")
+            {
+                RunZPath := ini.config.runz_dir "\RunZ.exe"
+            }
 
-<OpenBaiduNetdiskLink>:
-    Clipboard =
-    Send, ^c
-    ClipWait, 1
+            if (!FileExist(RunZPath))
+            {
+                return
+            }
 
-    Result := StrSplit(RegExReplace(Clipboard, "(链接：|密码：|提取)"), " ")
-    Run, % Result[1]
-    Sleep, 2000
-    Send, % Result[2]
-    Send, {Enter}
-return
+            Run, "%RunZPath%"
+        return
 
-ClickContextMenu(key)
-{
-    Send, {AppsKey}
-    WinWait, ahk_class #32768
-    Send, %key%
-}
+        <AppendClipboard>:
+            OldClipboard := Clipboard
+            Clipboard =
+            Send, ^c
+            ClipWait, 2
+            Clipboard := OldClipboard . Clipboard
+        return
 
-<RunAhkInClipboard>:
-    tmp_file := A_Temp "\tmpcode.ahk"
-    FileDelete, %tmp_file%
-    FileAppend, %Clipboard%, %tmp_file%
-    Run, %A_ScriptDir%\vimd.exe %tmp_file%
-return
+        <OpenBaiduNetdiskLink>:
+            Clipboard =
+            Send, ^c
+            ClipWait, 1
 
-<SuspendMachine>:
-    DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0)
-return
+            Result := StrSplit(RegExReplace(Clipboard, "(链接：|密码：|提取)"), " ")
+            Run, % Result[1]
+            Sleep, 2000
+            Send, % Result[2]
+            Send, {Enter}
+        return
 
-<AlwaysOnTop>:
-    WinSet, AlwaysOnTop, on, A
-return
+        ClickContextMenu(key)
+        {
+            Send, {AppsKey}
+            WinWait, ahk_class #32768
+            Send, %key%
+        }
 
-<CancelAlwaysOnTop>:
-    WinSet, AlwaysOnTop, off, A
-return
+        <RunAhkInClipboard>:
+            tmp_file := A_Temp "\tmpcode.ahk"
+            FileDelete, %tmp_file%
+            FileAppend, %Clipboard%, %tmp_file%
+            Run, %A_ScriptDir%\vimd.exe %tmp_file%
+        return
 
-<ToggleTitleBar>:
-    WinSet, Style, ^0xC40000, A
-return
+        <SuspendMachine>:
+            DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0)
+        return
 
-<TurnMonitorOff>:
-    Sleep, 300
-    SendMessage, 0x112, 0xF170, 2, , Program Manager
-return
+        <AlwaysOnTop>:
+            WinSet, AlwaysOnTop, on, A
+        return
 
-<OpenRecycleBin>:
-    Run, explorer.exe ::{645ff040-5081-101b-9f08-00aa002f954e}
-return
+        <CancelAlwaysOnTop>:
+            WinSet, AlwaysOnTop, off, A
+        return
 
-<PrintCurrentTime>:
-    Send, % A_Now
-return
+        <ToggleTitleBar>:
+            WinSet, Style, ^0xC40000, A
+        return
 
-<EmptyRecycle>:
-	MsgBox, 4, , 将要清空回收站，是否执行？
-	IfMsgBox Yes
-		FileRecycleEmpty
-return
+        <TurnMonitorOff>:
+            Sleep, 300
+            SendMessage, 0x112, 0xF170, 2, , Program Manager
+        return
+
+        <OpenRecycleBin>:
+        Run, explorer.exe ::{645ff040-5081-101b-9f08-00aa002f954e}
+        return
+
+        <PrintCurrentTime>:
+            Send, % A_Now
+        return
+
+        <EmptyRecycle>:
+            MsgBox, 4, , 将要清空回收站，是否执行？
+            IfMsgBox Yes
+            FileRecycleEmpty
+        return
