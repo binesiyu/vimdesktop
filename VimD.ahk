@@ -9,6 +9,7 @@ SetControlDelay, -1
 SetKeyDelay, -1
 ; DetectHiddenWindows, On
 FileEncoding, UTF-8
+SetTitleMatchMode, 2
 SendMode, Input
 
 Menu, Tray, Icon, %A_ScriptDir%\vimd.ico
@@ -26,10 +27,13 @@ Menu, Tray, Default, 热键 &K
 Menu, Tray, Click, 1
 
 VimdRun()
+LoadConfigs("config.ini")
+LoadGui()
 
 return
 
 #Include %A_ScriptDir%\core\Main.ahk
+#Include %A_ScriptDir%\core\Renzo.ahk
 #Include %A_ScriptDir%\core\Vim.ahk
 #Include %A_ScriptDir%\core\VimDConfig.ahk
 #Include %A_ScriptDir%\lib\EasyIni.ahk
