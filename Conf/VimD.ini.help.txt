@@ -52,14 +52,10 @@ vim
 [plugins]
 General=1
 TotalCommander=1
-WinMerge=1
 TCDialog=1
 TCCompare=1
-BeyondCompare4=1
 Foobar2000=1
 VimDConfig=1
-MicrosoftExcel=1
-Explorer=1
 
 ; 设置窗口名
 ;[记事本]
@@ -127,58 +123,5 @@ MenuIconSize=20
 ; <c-o>=function|TestFunction|arg
 ; 映射函数，|arg 可以省略，只支持一个参数
 
-a=<cm_SelectAll>
-b=<cm_UnpackFiles>
-c=<cm_MkDir>
-d=<TC_ListMark>
-e=<cm_edit>
-h=<TC_GoToParentEx>
-i=<TC_CreateNewFile>
-l=<TC_SuperReturn>
-m=<TC_ThumbsView>
-o=<cm_ContextMenu>
-p=<cm_PackFiles>
-u=<cm_CloseCurrentTab>
-fa=<TC_CopyFileContents>
-ff=<TC_CopyNameOnly>
-zh=<TC_Toggle_50_100Percent>
-zz=<TC_Toggle_50_100Percent_V>
-<S-A>=<TC_ViewFileUnderCursor>
-<S-B>=<cm_DirBranch>
-<S-C>=<cm_IntCompareFilesByContent>
-<S-F>=<cm_SearchStandAlone>
-<S-H>=<cm_GotoPreviousDir>
-<S-I>=<TC_OpenWithAlternateViewer>
-<S-L>=<cm_GotoNextDir>
-<S-M>=<cm_FileSync>
-<S-N>=<cm_SwitchToNextTab>
-<S-O>=<cm_SrcUserDef>
-<S-P>=<cm_SwitchToPreviousTab>
-<S-Q>=<TC_ToggleMenu>
-<S-T>=<cm_SrcOpenDrives>
-<S-W>=<cm_CompareFilesByContent>
-<S-Z>=<cm_Config>
-<c-b>=<pgup>
-<c-d>=<cm_ClearAll>
-<c-f>=<pgdn>
-<c-g>=<cm_SetAttrib>
-<c-h>=<left>
-<c-i>=<TC_CreateBlankFileNoExt>
-<c-j>=<down>
-<c-k>=<up>
-<c-l>=<right>
-<c-m>=<cm_CompareDirs>
-<c-n>=<cm_FtpConnect>
-<c-q>=<TC_SelectCmd>
-<c-s>=<cm_CountDirContent>
-<c-t>=<cm_OpenDirInNewTab>
-<c-y>=<cm_CopyFileDetailsToClip>
-<c-`>=<TC_ToggleShowInfo>
-,=<TC_Mark>
-.=function|TC_Run|explorer .
-<f9>=<TC_CopyUseQueues>
-<f10>=<TC_MoveUseQueues>
-<f11>=<cm_SwitchToPreviousTab>
-<f12>=<cm_SwitchToNextTab>
 ;"=<TC_MarkFile>
 ;_=<TC_UnMarkFile>

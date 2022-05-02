@@ -68,7 +68,7 @@ CheckPlugin()
             Filedelete, %ExtensionsAHK%
 
             Loop, %A_ScriptDir%\plugins\*.*, 2
-                plugins .=  "#include *i `%A_ScriptDir`%\plugins\" A_LoopFileName "\" A_LoopFileName ".ahk`n"
+                plugins .= "#include *i `%A_ScriptDir`%\plugins\" A_LoopFileName "\" A_LoopFileName ".ahk`n"
             FileAppend, %plugins%, %ExtensionsAHK%
 
             SaveTime := "/*`r`n[ExtensionsTime]`r`n"
@@ -88,7 +88,7 @@ CheckPlugin()
 
     for plugin, flag in ini.plugins
         if flag
-            vim.LoadPlugin(plugin)
+        vim.LoadPlugin(plugin)
 }
 
 CheckHotKey()
@@ -213,10 +213,10 @@ VIMD_CMD()
     {
         TC_Run(substr(VIMD_CMD_LIST[key], strlen(m1) + 2))
     }
-    else if RegExMatch(VIMD_CMD_LIST[key], "i)^(dccmd)\|", m)
-    {
-        DC_Run(substr(VIMD_CMD_LIST[key], strlen(m1) + 2))
-    }
+    ; else if RegExMatch(VIMD_CMD_LIST[key], "i)^(dccmd)\|", m)
+    ; {
+    ;     DC_Run(substr(VIMD_CMD_LIST[key], strlen(m1) + 2))
+    ; }
     else if RegExMatch(VIMD_CMD_LIST[key], "i)^(wshkey)\|", m)
     {
         SendLevel, 1
