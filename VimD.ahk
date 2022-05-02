@@ -12,7 +12,9 @@ FileEncoding, UTF-8
 SendMode, Input
 
 Menu, Tray, Icon, %A_ScriptDir%\vimd.ico
-Menu, Tray, NoStandard
+if (A_IsCompiled){
+    Menu, Tray, NoStandard
+}
 Menu, Tray, Add, 热键 &K, <VimDConfig_Keymap>
 Menu, Tray, Add, 插件 &P, <VimDConfig_Plugin>
 Menu, Tray, Add, 配置 &C, <VimDConfig_EditConfig>

@@ -50,7 +50,7 @@ VimdRun()
     CheckHotKey()
 
     ; 定时检查配置文件更新
-    SetTimer, WatchConfigFile, 2000
+    ;SetTimer, WatchConfigFile, 2000
 }
 
 CheckPlugin()
