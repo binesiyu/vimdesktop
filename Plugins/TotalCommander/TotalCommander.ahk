@@ -131,6 +131,7 @@
     vim.Comment("<TC_Restart>", "重启 TC")
     vim.Comment("<TC_PreviousParallelDir>", "切换到上一个同级目录")
     vim.Comment("<TC_NextParallelDir>", "切换到下一个同级目录")
+    vim.Comment("<TC_Fvim>", "使用Fvim编辑")
 
     vim.SetWin("TCQuickSearch", "TQUICKSEARCH")
     vim.Mode("normal", "TCQuickSearch")
@@ -297,7 +298,7 @@
         vim.Map("s8", "<cm_SrcSortByCol8>", "TTOTAL_CMD")
         vim.Map("s9", "<cm_SrcSortByCol9>", "TTOTAL_CMD")
         vim.Map("s0", "<cm_SrcUnsorted>", "TTOTAL_CMD")
-        vim.Map("v", "<cm_SrcQuickView>", "TTOTAL_CMD")
+        vim.Map("v", "<TC_Fvim>", "TTOTAL_CMD")
         vim.Map("<space>", "<cm_SrcQuickView>", "TTOTAL_CMD")
         vim.Map("VV", "<cm_SrcCustomViewMenu>", "TTOTAL_CMD")
         vim.Map("Vb", "<cm_VisButtonbar>", "TTOTAL_CMD")
@@ -744,6 +745,10 @@
             ControlGetFocus, TLB, ahk_class TTOTAL_CMD
             ControlGetPos, xn, yn, , , %TLB%, ahk_class TTOTAL_CMD
             Menu, MarkMenu, Show, %xn%, %yn%
+        return
+
+        <TC_Fvim>:
+            Send, ^!{F4}
         return
 
         <TC_CreateNewFile>:
