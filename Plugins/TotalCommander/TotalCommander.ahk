@@ -137,6 +137,9 @@
     vim.Mode("normal", "TCQuickSearch")
     vim.Map("J", "<Down>", "TCQuickSearch")
     vim.Map("K", "<Up>", "TCQuickSearch")
+    vim.Map("<c-n>", "<Down>", "TCQuickSearch")
+    vim.Map("<c-p>", "<Up>", "TCQuickSearch")
+    vim.Map("<c-v>", "<TC_Fvim>", "TCQuickSearch")
     vim.Map("<c-d>","<Esc>","TCQuickSearch")
     vim.Map("<c-c>","<Esc>","TCQuickSearch")
 
