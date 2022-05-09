@@ -212,7 +212,7 @@
     vim.Map("M", "<cm_ContextMenu>", "TTOTAL_CMD")
     vim.Map("gd", "<cm_DirectoryHotlist>", "TTOTAL_CMD")
     vim.Map("n", "<TC_AZHistory>", "TTOTAL_CMD")
-    vim.Map("N", "<cm_DirectoryHistory>","TTOTAL_CMD")
+    vim.Map("N", "<TC_CreateBlankFile>","TTOTAL_CMD")
     vim.Map("o", "<cm_TransferRight>", "TTOTAL_CMD")
     vim.Map("O", "<cm_TransferLeft>", "TTOTAL_CMD")
     vim.Map("p", "<cm_PasteFromClipboard>", "TTOTAL_CMD")

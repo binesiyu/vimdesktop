@@ -1,0 +1,21 @@
+
+GIT_WINDOWS="/mnt/c/Program Files/Git/cmd/git.exe"
+GIT_LINUX="/usr/bin/git"
+
+case "$(pwd -P)" in
+/mnt/?/*)
+  case "$@" in
+  # Needed to fix prompt, but it breaks things like paging, colours, etc
+  rev-parse*)
+    # running linux git for rev-parse seems faster, even without translating paths
+    exec "$GIT_LINUX" "$@"
+    ;;
+  *)
+    exec "$GIT_WINDOWS" "$@"
+    ;;
+  esac
+  ;;
+*)
+  exec "$GIT_LINUX" "$@"
+  ;;
+esac
