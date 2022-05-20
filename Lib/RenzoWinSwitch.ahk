@@ -67,7 +67,7 @@ ToggleApp(exePath, titleClass := "", titleRegexToGetPID := "", recheck := True, 
         }
 
         ; WinMinimize
-        minimizeWin()
+        ; minimizeWin()
         Return
     }
 
