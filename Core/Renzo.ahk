@@ -7,7 +7,6 @@
 #Include %A_ScriptDir%\Lib\RenzoWinSwitch.ahk
 #Include %A_ScriptDir%\Lib\RenzoFunc.ahk
 ; -----------------------------------------------------------------------
-#Include %A_ScriptDir%\Lib\RenzoGui.ahk
 
 ; -----------------------------------------------------------------------
 
@@ -60,11 +59,4 @@ LoadConfigs(configFile) {
 
     HotKey(hotKey, "ToggleApp", exePath, openPath,titleClass, titleRegexToGetPID, recheck, activeTray)
   }
-}
-
-LoadGui() {
-  Gui 1:Default
-  Gui 1:New, +Hwndswitchgui
-  Gui 1:Font, S12 cNavy, Microsoft YaHei
-  Gui 1:Add, ListView, xm r20 w1000 gMyListView AltSubmit, Title|App|Pid
 }

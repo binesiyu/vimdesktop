@@ -28,8 +28,8 @@ Menu, Tray, Default, 热键 &K
 Menu, Tray, Click, 1
 
 VimdRun()
+RenzoInit()
 LoadConfigs("config.ini")
-LoadGui()
 
 return
 

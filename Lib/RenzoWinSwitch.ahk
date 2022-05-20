@@ -1,4 +1,11 @@
-global winPathToIDMap := new HashTable()
+global winPathToIDMap
+global debug
+RenzoInit()
+{
+    global winPathToIDMap := new HashTable()
+    ; global debug := False
+    global debug := False
+}
 
 ; 切换应用, 模拟 Manico
 ; 比较建议 3 个参数都填，这样可以确定 Pid 以唤起正确的窗口
@@ -7,7 +14,6 @@ global winPathToIDMap := new HashTable()
 ; 参数 3：title regex：匹配正确的标题（\S 非空即可)
 ToggleApp(exePath, openPath := "",titleClass := "", titleRegexToGetPID := "", recheck := True, activeTray := False)
 {
-    global debug := False
     ; path, app.exe, app
     SplitPath, exePath, exeName, , , noExt
 
@@ -62,17 +68,16 @@ ToggleApp(exePath, openPath := "",titleClass := "", titleRegexToGetPID := "", re
     ; --------------------------------------------------------------
     ; 若应用名对应的窗口为激活状态 (Active)，则需要隐藏
     ; --------------------------------------------------------------
-    If WinActive("ahk_exe " . exeName)
-    {
-        If debug {
-            ShowText("<" . exeName . "> is active, minimize now")
-        }
+    ; If WinActive("ahk_exe " . exeName)
+    ; {
+    ; If debug {
+    ; ShowText("<" . exeName . "> is active, minimize now")
+    ; }
 
-        ; WinMinimize
-        ; minimizeWin()
-        Return
-    }
-
+    ; WinMinimize
+    ; minimizeWin()
+    ; Return
+    ; }
 
     ; --------------------------------------------------------------
     ; 若应用名对应的窗口为未激活状态，则需要激活
@@ -80,22 +85,11 @@ ToggleApp(exePath, openPath := "",titleClass := "", titleRegexToGetPID := "", re
     ; --------------------------------------------------------------
     If titleRegexToGetPID
     {
-        ahkID := getMainProcessID(exeName, titleClass, titleRegexToGetPID)
-        If winPathToIDMap.HasKey(exePath) {
-            If debug {
-                ShowText("<" . exeName . " | pid = " .  ahkID . "> not active, active now (from map)")
-            }
-            activeWinID(exeName, winPathToIDMap.Get(exePath), activeTray)
-            If !WinActive("ahk_exe " . exeName)
-            {
-                activeWinID(exeName, ahkID, activeTray)
-            }
-        } Else {
-            activeWinID(exeName, ahkID, activeTray)
-            ; WinActivate, ahk_id %ahkID%
-            If debug {
-                ShowText("<" . exeName . " | pid = " .  ahkID .  "> not active, active now")
-            }
+        ahkID := getMainProcessID(exeName, exePath, titleClass, titleRegexToGetPID)
+        activeWinID(exeName, ahkID, activeTray)
+        ; WinActivate, ahk_id %ahkID%
+        If debug {
+            ShowText("<" . exeName . " | pid = " . ahkID . "> not active, active now")
         }
 
         Return
@@ -106,7 +100,7 @@ ToggleApp(exePath, openPath := "",titleClass := "", titleRegexToGetPID := "", re
         ; WinActivate, ahk_class %titleClass%
         activeWinClass(exeName, titleClass, activeTray)
         If debug {
-            ShowText("<" . exeName . " | class = " .  titleClass .  "> not active, active now")
+            ShowText("<" . exeName . " | class = " . titleClass . "> not active, active now")
         }
 
         Return
@@ -115,12 +109,11 @@ ToggleApp(exePath, openPath := "",titleClass := "", titleRegexToGetPID := "", re
     activeWinName(exeName, activeTray)
     ; WinActivate, ahk_exe %exeName%
     If debug {
-        ShowText("<" . exeName . " | exe = " .  exeName .  "> not active, active now")
+        ShowText("<" . exeName . " | exe = " . exeName . "> not active, active now")
     }
 
     Return
 }
-
 
 ; 判断进程是否存在（返回PID）
 checkProcessNameExist(processName)
@@ -129,16 +122,41 @@ checkProcessNameExist(processName)
     Return ErrorLevel
 }
 
-
 ; 获取类似 chrome 等多进程的主程序 ID
-getMainProcessID(exeName, titleClass, titleRegexToGetPID := "")
+getMainProcessID(exeName,exePath, titleClass, titleRegexToGetPID := "")
 {
-    DetectHiddenWindows, On
+    ; DetectHiddenWindows, On
     ; 获取 exeName 的窗口列表，获取其 titleClass，并确认 title 匹配 titleRegexToGetPID
     WinGet, winList, List, ahk_exe %exeName%
-    DetectHiddenWindows, Off
+    ; DetectHiddenWindows, Off
+    index := 0
+    if (winList > 1)
+    {
+        ; Sort,winList
+        If winPathToIDMap.HasKey(exePath)
+        {
+            ahkIDSave := winPathToIDMap.Get(exePath)
+            Loop, % winList
+            {
+                ahkID := winList%A_Index%
+                if (ahkID = ahkIDSave)
+                {
+                    index := A_Index
+                    break
+                }
+            }
+        }
+    }
+    If debug {
+        ShowText("<" . exeName . " | index = " . index . "> index select")
+    }
     Loop, % winList
     {
+        if (A_Index <= index)
+        {
+            Continue
+        }
+
         ahkID := winList%A_Index%
         WinGetClass, currentClass, ahk_id %ahkID%
         ; MsgBox,% A_Index . "/" . winList . "`n" . "currentClass = " .  currentClass . "`n" . "titleClass = " . titleClass
@@ -156,8 +174,10 @@ getMainProcessID(exeName, titleClass, titleRegexToGetPID := "")
             ; MsgBox, %currentTitle%
 
             If (currentTitle ~= titleRegexToGetPID)
+            {
                 ; MsgBox, "titleLoop = " . %currentTitle%
                 Return ahkID
+            }
         }
 
         Continue
@@ -169,37 +189,38 @@ getMainProcessID(exeName, titleClass, titleRegexToGetPID := "")
 ; Window Active Helper Functions
 activeWinClass(exeName, cls, activeTray)
 {
-    saveWindowToMap()
+    ; saveWindowToMap()
     If activeTray {
         TrayIcon_Button(exeName)
         Return
     }
     WinActivate ahk_class %cls%
+    saveWindowToMap()
 }
 
 activeWinID(exeName, id, activeTray)
 {
-    saveWindowToMap()
     If activeTray {
         TrayIcon_Button(exeName)
         Return
     }
     WinActivate, ahk_id %id%
+    saveWindowToMap()
 }
 
 activeWinName(exeName, activeTray)
 {
-    saveWindowToMap()
     If activeTray {
         TrayIcon_Button(exeName)
         Return
     }
     WinActivate, ahk_exe %exeName%
+    saveWindowToMap()
 }
 
 minimizeWin()
 {
-    saveWindowToMap()
+    ; saveWindowToMap()
     WinMinimize
 }
 
@@ -214,7 +235,7 @@ saveWindowToMap()
 ; 显示提示 t 秒并自动消失
 ShowText(str, t := 1, ExitScript := 0, x := "", y := "")
 {
-    t *= 1000
+    t *= 10000
     ToolTip, %str%, %x%, %y%
     SetTimer, removeTip, -%t%
     If ExitScript
