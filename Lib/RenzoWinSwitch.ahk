@@ -5,7 +5,7 @@ global winPathToIDMap := new HashTable()
 ; 参数 1：ahk_exe ProcessNameOrPath in WinTitle to identIfy a window belonging to any process with the given name or path.
 ; 参数 2：ahk_class ClassName in WinTitle to identIfy a window by its window class
 ; 参数 3：title regex：匹配正确的标题（\S 非空即可)
-ToggleApp(exePath, titleClass := "", titleRegexToGetPID := "", recheck := True, activeTray := False)
+ToggleApp(exePath, openPath := "",titleClass := "", titleRegexToGetPID := "", recheck := True, activeTray := False)
 {
     global debug := False
     ; path, app.exe, app
@@ -16,7 +16,8 @@ ToggleApp(exePath, titleClass := "", titleRegexToGetPID := "", recheck := True, 
     ; --------------------------------------------------------------
     If !checkProcessNameExist(exeName)
     {
-        Run, %exePath%
+        ; Run, %exePath%
+        Run, %openPath%
         If titleClass
         {
             ; WinWait, ahk_class %titleClass%, , 1
@@ -25,7 +26,7 @@ ToggleApp(exePath, titleClass := "", titleRegexToGetPID := "", recheck := True, 
         }
 
         If debug {
-            ShowText("Run " . exePath)
+            ShowText("Run " . openPath)
         }
 
         Return
@@ -44,7 +45,8 @@ ToggleApp(exePath, titleClass := "", titleRegexToGetPID := "", recheck := True, 
 
         If (%windowCount% == 0)
         {
-            Run, %exePath%
+            ; Run, %exePath%
+            Run, %openPath%
 
             If titleClass
             {

@@ -19,6 +19,7 @@ LoadConfigs(configFile) {
     appName := apps%A_Index%
     IniRead, hotKey, config.ini, %appName%, HotKey
     IniRead, exePath, config.ini, %appName%, ExePath
+    IniRead, openPath, config.ini, %appName%, OpenPath
     IniRead, titleClass, config.ini, %appName%, TitleClass
     IniRead, titleRegexToGetPID, config.ini, %appName%, TitleRegex
     IniRead, recheck, config.ini, %appName%, Recheck
@@ -27,6 +28,11 @@ LoadConfigs(configFile) {
     If titleClass = ERROR
     {
       titleClass := ""
+    }
+
+    If openPath = ERROR
+    {
+      openPath := exePath
     }
 
     If titleRegexToGetPID = ERROR
@@ -52,7 +58,7 @@ LoadConfigs(configFile) {
       activeTray := True
     }
 
-    HotKey(hotKey, "ToggleApp", exePath, titleClass, titleRegexToGetPID, recheck, activeTray)
+    HotKey(hotKey, "ToggleApp", exePath, openPath,titleClass, titleRegexToGetPID, recheck, activeTray)
   }
 }
 

@@ -9,7 +9,8 @@ SetControlDelay, -1
 SetKeyDelay, -1
 ; DetectHiddenWindows, On
 FileEncoding, UTF-8
-SetTitleMatchMode, 2
+; SetTitleMatchMode, 2
+SetTitleMatchMode, RegEx
 SendMode, Input
 
 Menu, Tray, Icon, %A_ScriptDir%\vimd.ico
