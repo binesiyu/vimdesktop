@@ -36,7 +36,7 @@ vim
 
 [global]
 ; 激活通用快捷键
-<w-t>=<Gen_Toggle>
+; <w-t>=<Gen_Toggle>
 ; 切换TC
 <w-e>=<TC_ToggleTC>
 ; 重新加载VimDesktop
@@ -45,8 +45,12 @@ vim
 <a-printscreen>=<PrintScreenAndSave>
 
 ; 激活TC作为文件选择框，再次按下该快捷键可执行文件打开操作
-<w-o>=<TC_OpenTCDialog>
-<w-c>=run|explorer
+;<w-o>=<TC_OpenTCDialog>
+;<w-c>=run|explorer
+
+<w-m>=<WindowMax>
+<w-n>=<WindowMin>
+<w-r>=<WindowRestore>
 
 ; 启用（1）/禁用（0） 插件，默认禁用
 [plugins]
