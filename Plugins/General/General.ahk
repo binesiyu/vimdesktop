@@ -68,6 +68,8 @@
     vim.SetAction("<AppendClipboard>", "往剪切板中追加内容")
     vim.SetAction("<SwitchToEngIMEAndEsc>", "切换到英文输入法并按 Esc 键")
     vim.SetAction("<SwitchToEngIME>", "切换到英文输入法")
+    vim.SetAction("<ClipboardCopy>", "复制")
+    vim.SetAction("<ClipboardPaste>", "粘贴")
 
     vim.SetWin("General", "General")
     vim.SetMode("insert", "General")
@@ -1093,6 +1095,14 @@ TestFunction(arg)
             ; 下方代码可只保留一个
             SwitchIME(0x04090409) ; 英语(美国) 美式键盘
             SwitchIME(0x08040804) ; 中文(中国) 简体中文-美式键盘
+        return
+
+        <ClipboardCopy>:
+            Send, ^c
+        return
+
+        <ClipboardPaste>:
+            Send, ^v
         return
 
         <RunZ>:

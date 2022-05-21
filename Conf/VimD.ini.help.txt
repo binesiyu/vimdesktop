@@ -52,6 +52,9 @@ vim
 <w-n>=<WindowMin>
 <w-r>=<WindowRestore>
 
+<w-c>=<ClipboardCopy>
+<w-v>=<ClipboardPaste>
+
 ; 启用（1）/禁用（0） 插件，默认禁用
 [plugins]
 General=1
