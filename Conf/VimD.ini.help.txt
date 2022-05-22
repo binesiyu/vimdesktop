@@ -49,8 +49,8 @@ vim
 ;<w-c>=run|explorer
 
 <w-m>=<WindowMax>
-<w-n>=<WindowMin>
-<w-r>=<WindowRestore>
+<w-h>=<WindowMin>
+<w-n>=<WindowRestore>
 
 <w-c>=<ClipboardCopy>
 <w-v>=<ClipboardPaste>
