@@ -52,6 +52,10 @@ vim
 <w-h>=<WindowMin>
 <w-n>=<WindowRestore>
 
+<a-m>=<WindowMax>
+<a-h>=<WindowMin>
+<a-n>=<WindowRestore>
+
 <w-c>=<ClipboardCopy>
 <w-v>=<ClipboardPaste>
 

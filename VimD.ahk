@@ -14,17 +14,23 @@ SetTitleMatchMode, RegEx
 SendMode, Input
 
 Menu, Tray, Icon, %A_ScriptDir%\vimd.ico
-if (A_IsCompiled){
-    Menu, Tray, NoStandard
-}
 Menu, Tray, Add, 热键 &K, <VimDConfig_Keymap>
 Menu, Tray, Add, 插件 &P, <VimDConfig_Plugin>
 Menu, Tray, Add, 配置 &C, <VimDConfig_EditConfig>
+
+if (A_IsCompiled){
+    Menu, Tray, NoStandard
+    Menu, Tray, Add, Spy &Y, <WindowSpy>
+    Menu, Tray, Default, Spy &Y
+}
+else {
+    Menu, Tray, Default, 热键 &K
+}
+
 Menu, Tray, Add,
 Menu, Tray, Add, 禁用 &S, <Suspend>
 Menu, Tray, Add, 重启 &R, <Reload>
 Menu, Tray, Add, 退出 &X, <Exit>
-Menu, Tray, Default, 热键 &K
 Menu, Tray, Click, 1
 
 VimdRun()

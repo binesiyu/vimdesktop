@@ -11,6 +11,7 @@
     vim.SetAction("<Gen_Toggle>", "启用/禁用 Vim 热键（General 插件）")
     vim.SetAction("<Reload>", "重新加载")
     vim.SetAction("<Suspend>", "禁用")
+    vim.SetAction("<WindowSpy>", "WindowSpy")
     vim.SetAction("<WindowMoveDown>", "窗口移动到下方")
     vim.SetAction("<WindowMoveUp>", "窗口移动到上方")
     vim.SetAction("<WindowMoveLeft>", "窗口移动到左侧")
@@ -181,6 +182,10 @@ return
 
 <Suspend>:
     Suspend
+return
+
+<WindowSpy>:
+    Run, "C:\Program Files\AutoHotkey\WindowSpy.ahk"
 return
 
 <down>:
