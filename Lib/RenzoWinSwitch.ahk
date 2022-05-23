@@ -125,20 +125,64 @@ checkProcessNameExist(processName)
 ; 获取类似 chrome 等多进程的主程序 ID
 getMainProcessID(exeName,exePath, titleClass, titleRegexToGetPID := "")
 {
+    ; DetectSave := A_DetectHiddenWindows
+    ; DetectHiddenWindows, Off
     ; DetectHiddenWindows, On
     ; 获取 exeName 的窗口列表，获取其 titleClass，并确认 title 匹配 titleRegexToGetPID
     WinGet, winList, List, ahk_exe %exeName%
-    ; DetectHiddenWindows, Off
+    ; DetectHiddenWindows, %DetectSave%
     index := 0
+    Array := "winList"
+    ArrayCount := winList
     if (winList > 1)
+    {
+        ; Write to the array:
+        ArrayCount := 0
+        Array := "winListNew"
+        Loop, % winList
+        {
+            ahkID := winList%A_Index%
+            WinGet, State, MinMax, ahk_id %ahkID%
+            if (State = -1)
+            {
+                Continue
+            }
+            ArrayIndex := 1
+            Loop, % ArrayCount
+            {
+                ahkIDSave := %Array%%A_Index%
+                if (ahkIDSave > ahkID)
+                {
+                    ArrayIndex := A_Index
+                    break
+                }
+            }
+
+            ArrayCount += 1 ; Keep track of how many items are in the array.
+            Loop, % ArrayCount
+            {
+                if (A_Index <= ArrayIndex)
+                {
+                    Continue
+                }
+
+                localArrayIndex := A_Index - 1
+                %Array%%A_Index% := %Array%%localArrayIndex% ; Store this line in the next array element.
+            }
+            %Array%%ArrayIndex% := ahkID ; Store this line in the next array element.
+
+        }
+    }
+
+    if (ArrayCount > 1)
     {
         ; Sort,winList
         If winPathToIDMap.HasKey(exePath)
         {
             ahkIDSave := winPathToIDMap.Get(exePath)
-            Loop, % winList
+            Loop, % ArrayCount
             {
-                ahkID := winList%A_Index%
+                ahkID := %Array%%A_Index%
                 if (ahkID = ahkIDSave)
                 {
                     index := A_Index
@@ -147,17 +191,24 @@ getMainProcessID(exeName,exePath, titleClass, titleRegexToGetPID := "")
             }
         }
     }
-    If debug {
-        ShowText("<" . exeName . " | index = " . index . "> index select")
+
+    if (index >= ArrayCount)
+    {
+        index := 0
     }
-    Loop, % winList
+
+    ; If debug {
+    ;     ShowText("<" . exeName . " | index = " . index . "> index select")
+    ; }
+    Loop, % ArrayCount
     {
         if (A_Index <= index)
         {
             Continue
         }
 
-        ahkID := winList%A_Index%
+        ahkID := %Array%%A_Index%
+
         WinGetClass, currentClass, ahk_id %ahkID%
         ; MsgBox,% A_Index . "/" . winList . "`n" . "currentClass = " .  currentClass . "`n" . "titleClass = " . titleClass
         ; 1/12：遍历至第几个
@@ -179,8 +230,6 @@ getMainProcessID(exeName,exePath, titleClass, titleRegexToGetPID := "")
                 Return ahkID
             }
         }
-
-        Continue
     }
 
     Return False
